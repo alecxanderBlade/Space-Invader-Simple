@@ -1,3 +1,5 @@
+//Press A and D to move character from side to side and press W to shoot
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
