@@ -1,0 +1,107 @@
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace SpaceInvaders
+{
+    public partial class GameForm : Form
+    {
+        int playerSpeed =20, enemySpeed = 1, bulletSpeed = 0, rndEnemySpwn;
+        Random rnd = new Random();
+        bool playerLeft;
+        bool playerRight;
+        bool bulletLocation;
+        public GameForm()
+        {
+            InitializeComponent();
+            player.BringToFront();
+        }
+        private void gameTimer_Tick(object sender, EventArgs e)
+        {
+            
+            rndEnemySpwn = rnd.Next(1, 425);
+            enemy1.Top += enemySpeed;
+            enemy2.Top += enemySpeed;
+            enemy3.Top += enemySpeed;
+            bullet.Top += bulletSpeed;
+
+            if (bulletLocation)
+            {
+                bullet.Location = new Point( 23 + player.Location.X, player.Location.Y);
+            }
+            if (playerLeft)
+            {
+                player.Left += -playerSpeed;
+            }
+            if (playerRight)
+            {
+                player.Left += playerSpeed;               
+            }
+            if (bullet.Top < 1)
+            {
+                bulletLocation = true;
+                bulletSpeed = 0;
+            }
+            if (enemy1.Bounds.IntersectsWith(bullet.Bounds))
+            {
+                enemy1.Location = new Point(rndEnemySpwn, -60);
+            }
+            if (enemy2.Bounds.IntersectsWith(bullet.Bounds))
+            {
+                enemy2.Location = new Point(rndEnemySpwn, -60);
+            }
+            if (enemy3.Bounds.IntersectsWith(bullet.Bounds))
+            {
+                enemy3.Location = new Point(rndEnemySpwn, -60);
+            }
+            if (enemy1.Location == new Point(enemy1.Location.X, 600))
+            {
+                enemy1.Location = new Point(rndEnemySpwn, -60);
+            }
+            if (enemy2.Location == new Point(enemy2.Location.X, 600))
+            {
+                enemy2.Location = new Point(rndEnemySpwn, -60);
+            }
+            if (enemy3.Location == new Point(enemy3.Location.X, 600))
+            {
+                enemy3.Location = new Point(rndEnemySpwn, -50);
+            }
+        }
+
+        private void keyPressed(object sender, KeyEventArgs e)
+        {          
+            if (e.KeyData == Keys.W)
+            {
+                bulletLocation = false;
+                bullet.Top += bulletSpeed = -20;
+            }
+           if(e.KeyData == Keys.D)
+            {
+                if (player.Bounds.IntersectsWith(bullet.Bounds))
+                {
+                    bulletLocation = true;
+                }
+                playerRight = true;              
+            }
+            if (e.KeyData == Keys.A)
+            {
+                if (player.Bounds.IntersectsWith(bullet.Bounds))
+                {
+                    bulletLocation = true;
+                }
+                playerLeft = true;
+            }
+        }
+        private void keyReleased(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.A)
+            {
+                playerLeft = false;
+            }
+            if (e.KeyCode == Keys.D)
+            {
+                playerRight = false;
+            }
+        }
+    }
+}
